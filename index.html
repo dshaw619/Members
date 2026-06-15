@@ -312,9 +312,9 @@ let stateLayer;
 function initializeMap() {
   if (map) { map.remove(); }
   map = L.map('map').setView([39.8283, -98.5795], 4);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors',
-    maxZoom: 15, minZoom: 3
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd', maxZoom: 19, minZoom: 3
   }).addTo(map);
 }
 
