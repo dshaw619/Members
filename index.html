@@ -7,748 +7,672 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
 <style>
 body {
-margin: 0;
-padding: 20px;
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
 }
 .container {
-max-width: 1400px;
-margin: 0 auto;
-background: white;
-border-radius: 15px;
-box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-overflow: hidden;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  overflow: hidden;
 }
 .header {
-background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-color: white;
-padding: 25px;
-text-align: center;
+  background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+  color: white;
+  padding: 25px;
+  text-align: center;
 }
 .header h1 {
-margin: 0;
-font-size: 2.5em;
-font-weight: 300;
-text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  margin: 0;
+  font-size: 2.5em;
+  font-weight: 300;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 .header p {
-margin: 10px 0 0 0;
-opacity: 0.9;
-font-size: 1.1em;
+  margin: 10px 0 0 0;
+  opacity: 0.9;
+  font-size: 1.1em;
 }
 .nav-buttons {
-display: flex;
-gap: 10px;
-justify-content: center;
-flex-wrap: wrap;
-padding: 15px;
-background: #f8f9fa;
-border-bottom: 1px solid #eee;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 15px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #eee;
 }
 .nav-button {
-background: linear-gradient(135deg, #3498db, #2980b9);
-color: white;
-border: none;
-padding: 10px 20px;
-margin: 5px;
-border-radius: 25px;
-cursor: pointer;
-font-size: 14px;
-font-weight: 600;
-transition: all 0.3s ease;
-box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
 }
 .nav-button:hover {
-transform: translateY(-2px);
-box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
 }
 .nav-button.active {
-background: linear-gradient(135deg, #e74c3c, #c0392b);
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
 }
 #map {
-height: 600px;
-width: 100%;
+  height: 620px;
+  width: 100%;
 }
 .legend {
-background: white;
-padding: 20px;
-border-top: 1px solid #eee;
+  background: white;
+  padding: 20px;
+  border-top: 1px solid #eee;
 }
 .legend h3 {
-margin: 0 0 15px 0;
-color: #2c3e50;
-font-size: 1.3em;
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+  font-size: 1.3em;
 }
 .legend-item {
-display: flex;
-align-items: center;
-margin: 8px 0;
-font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+  font-size: 1.1em;
 }
 .legend-color {
-width: 25px;
-height: 20px;
-margin-right: 12px;
-border-radius: 4px;
-border: 2px solid #333;
+  width: 25px;
+  height: 20px;
+  margin-right: 12px;
+  border-radius: 4px;
+  border: 2px solid #333;
+  flex-shrink: 0;
 }
 /* US Map Colors */
-.high-members { background: #c0392b; }
-.medium-high-members { background: #e74c3c; }
-.medium-members { background: #f39c12; }
-.low-members { background: #f1c40f; }
-.very-low-members { background: #2ecc71; }
-.no-members { background: #ecf0f1; }
-
-/* California County Colors */
-.very-high-members { background: #8b0000; }
-.ca-high-members { background: #dc143c; }
-.ca-medium-members { background: #ff6347; }
-.ca-low-members { background: #ffa500; }
-.ca-very-low-members { background: #32cd32; }
+.high-members       { background: #c0392b; }
+.medium-high-members{ background: #e74c3c; }
+.medium-members     { background: #f39c12; }
+.low-members        { background: #f1c40f; }
+.very-low-members   { background: #2ecc71; }
+.no-members         { background: #ecf0f1; }
+/* CA / SD / ZIP Colors */
+.very-high-members  { background: #8b0000; }
+.ca-high-members    { background: #dc143c; }
+.ca-medium-members  { background: #ff6347; }
+.ca-low-members     { background: #ffa500; }
+.ca-very-low-members{ background: #32cd32; }
 
 .stats {
-background: #f8f9fa;
-padding: 20px;
-border-top: 1px solid #eee;
-text-align: center;
+  background: #f8f9fa;
+  padding: 20px;
+  border-top: 1px solid #eee;
+  text-align: center;
 }
 .stats h3 {
-margin: 0 0 10px 0;
-color: #2c3e50;
+  margin: 0 0 10px 0;
+  color: #2c3e50;
 }
 .member-count {
-font-size: 2em;
-font-weight: bold;
-color: #3498db;
-margin: 0;
+  font-size: 2em;
+  font-weight: bold;
+  color: #3498db;
+  margin: 0;
 }
 .status-message {
-background: #e8f4fd;
-border: 1px solid #3498db;
-border-radius: 8px;
-padding: 15px;
-margin: 20px;
-text-align: center;
-color: #2c3e50;
+  background: #e8f4fd;
+  border: 1px solid #3498db;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 20px;
+  text-align: center;
+  color: #2c3e50;
 }
 .custom-tooltip {
-background: rgba(44, 62, 80, 0.95) !important;
-color: white !important;
-border: none !important;
-border-radius: 6px !important;
-padding: 8px 12px !important;
-font-size: 14px !important;
-font-weight: 500 !important;
-box-shadow: 0 3px 12px rgba(0,0,0,0.3) !important;
-text-shadow: none !important;
+  background: rgba(44, 62, 80, 0.95) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.3) !important;
+  text-shadow: none !important;
 }
 .popup-button {
-background: #3498db;
-color: white;
-border: none;
-padding: 8px 15px;
-border-radius: 5px;
-cursor: pointer;
-margin-top: 10px;
-font-size: 13px;
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 13px;
+  display: block;
+  width: 100%;
 }
-.popup-button:hover {
-background: #2980b9;
-}
-.county-list, .city-list {
-background: white;
-padding: 20px;
-border-top: 1px solid #eee;
-}
-.county-grid, .city-grid {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-gap: 10px;
-margin-top: 15px;
-}
-.county-item, .city-item {
-background: #f8f9fa;
-padding: 10px;
-border-radius: 6px;
-border-left: 4px solid #3498db;
-cursor: pointer;
-transition: all 0.2s;
-}
-.county-item:hover, .city-item:hover {
-background: #e8f4fd;
-transform: translateY(-1px);
-}
-.county-name, .city-name {
-font-weight: bold;
-color: #2c3e50;
-font-size: 14px;
-}
-.county-members, .city-members {
-color: #3498db;
-font-size: 12px;
+.popup-button:hover { background: #2980b9; }
+.footer-note {
+  background: #f8f9fa;
+  border-top: 1px solid #eee;
+  padding: 10px 20px;
+  font-size: 0.78em;
+  color: #95a5a6;
+  text-align: right;
 }
 @media (max-width: 768px) {
-.header h1 { font-size: 2em; }
-.nav-buttons { flex-direction: column; align-items: center; }
-.county-grid, .city-grid { grid-template-columns: 1fr; }
+  .header h1 { font-size: 2em; }
+  .nav-buttons { flex-direction: column; align-items: center; }
 }
 </style>
 </head>
 <body>
 <div class="container">
-<div class="header">
-<h1 id="mapTitle">Member Distribution by State</h1>
-<p id="mapSubtitle">413 members across 32 states</p>
-</div>
-<div class="nav-buttons">
-<button class="nav-button active" onclick="showUSMap()">🇺🇸 US States</button>
-<button class="nav-button" onclick="showCaliforniaMap()">🏔️ CA Counties</button>
-<button class="nav-button" onclick="showSanDiegoMap()">🏖️ SD Cities</button>
-</div>
-<div id="map"></div>
-<div class="legend" id="legendContainer">
-<!-- Legend content will be populated by JavaScript -->
-</div>
-<div class="stats" id="statsContainer">
-<!-- Stats content will be populated by JavaScript -->
-</div>
-<div class="county-list" id="countyListContainer" style="display: none;">
-<!-- County list will be populated by JavaScript -->
-</div>
-<div class="city-list" id="cityListContainer" style="display: none;">
-<!-- City list will be populated by JavaScript -->
-</div>
+  <div class="header">
+    <h1 id="mapTitle">Member Distribution by State</h1>
+    <p id="mapSubtitle">399 total records — hover to inspect, click to drill down</p>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-button active" onclick="showUSMap()">🇺🇸 US States</button>
+    <button class="nav-button" onclick="showCaliforniaMap()">🏔️ CA Counties</button>
+    <button class="nav-button" onclick="showSanDiegoMap()">🏖️ SD County Cities</button>
+    <button class="nav-button" onclick="showZipMap()">🗺️ San Diego City ZIPs</button>
+  </div>
+  <div id="map"></div>
+  <div class="legend" id="legendContainer"></div>
+  <div class="stats" id="statsContainer"></div>
+  <div class="footer-note">Created by Claude (claude-sonnet-4-6), 14 Jun 2026 &nbsp;|&nbsp; Source: 2026-06-14_Member_Locations_standardized_v3.xlsx</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
-// Global variables
+
+// ── DATA ──────────────────────────────────────────────────────────────────────
+
+const membersByState = {
+  'California': 281, 'Washington': 18, 'Oregon': 11, 'Colorado': 7,
+  'Arizona': 7, 'Texas': 6, 'North Carolina': 6, 'Nevada': 4,
+  'New Jersey': 4, 'Florida': 4, 'Utah': 4, 'Ohio': 3, 'Illinois': 3,
+  'Maryland': 3, 'Virginia': 3, 'Nebraska': 2, 'Georgia': 2,
+  'Tennessee': 2, 'Arkansas': 2, 'New York': 2, 'Pennsylvania': 2,
+  'Maine': 2, 'Massachusetts': 2, 'Kentucky': 2, 'Minnesota': 2,
+  'Montana': 1, 'Hawaii': 1, 'Michigan': 1, 'Indiana': 1,
+  'Alaska': 1, 'Delaware': 1, 'South Carolina': 1, 'Iowa': 1,
+  'District of Columbia': 1
+};
+const usTotalMembers = 393;
+const usTotalStates = 34;
+
+const membersByCounty = {
+  'San Diego':     { count: 232, coords: [32.72, -116.85] },
+  'Sacramento':    { count: 10,  coords: [38.56, -121.47] },
+  'Orange':        { count: 6,   coords: [33.72, -117.83] },
+  'Riverside':     { count: 5,   coords: [33.75, -116.04] },
+  'Santa Clara':   { count: 4,   coords: [37.35, -121.96] },
+  'Alameda':       { count: 3,   coords: [37.65, -121.89] },
+  'Santa Barbara': { count: 3,   coords: [34.74, -119.78] },
+  'Los Angeles':   { count: 2,   coords: [34.10, -118.25] },
+  'San Mateo':     { count: 2,   coords: [37.43, -122.41] },
+  'Placer':        { count: 1,   coords: [38.89, -121.07] },
+  'Imperial':      { count: 1,   coords: [32.84, -115.56] },
+  'Marin':         { count: 1,   coords: [38.05, -122.73] },
+  'Contra Costa':  { count: 1,   coords: [37.92, -121.97] },
+  'Monterey':      { count: 1,   coords: [36.24, -121.32] },
+  'Nevada':        { count: 1,   coords: [39.30, -120.77] },
+  'Sonoma':        { count: 1,   coords: [38.58, -122.92] },
+  'Ventura':       { count: 1,   coords: [34.43, -119.10] },
+  'Tulare':        { count: 1,   coords: [36.22, -118.80] },
+  'Shasta':        { count: 1,   coords: [40.76, -122.00] },
+  'San Joaquin':   { count: 1,   coords: [37.94, -121.27] },
+  'Humboldt':      { count: 1,   coords: [40.75, -124.01] },
+  'San Bernardino':{ count: 1,   coords: [34.84, -116.18] },
+  'Unknown':       { count: 1,   coords: [35.50, -119.20] }
+};
+const caTotalMembers = 281;
+
+const membersByCity = {
+  'San Diego':          { count: 118, coords: [32.7157, -117.1611] },
+  'El Cajon':           { count: 15,  coords: [32.7948, -116.9625] },
+  'Lakeside':           { count: 10,  coords: [32.8577, -116.9220] },
+  'Coronado':           { count: 8,   coords: [32.6859, -117.1831] },
+  'Encinitas':          { count: 8,   coords: [33.0370, -117.2920] },
+  'La Jolla':           { count: 8,   coords: [32.8328, -117.2713] },
+  'Poway':              { count: 7,   coords: [32.9628, -117.0359] },
+  'Carlsbad':           { count: 7,   coords: [33.1581, -117.3506] },
+  'La Mesa':            { count: 6,   coords: [32.7678, -117.0231] },
+  'Spring Valley':      { count: 6,   coords: [32.7450, -116.9989] },
+  'Jamul':              { count: 5,   coords: [32.7192, -116.8731] },
+  'Bonita':             { count: 4,   coords: [32.6630, -117.0316] },
+  'Chula Vista':        { count: 4,   coords: [32.6401, -117.0842] },
+  'Santee':             { count: 4,   coords: [32.8386, -116.9739] },
+  'Ramona':             { count: 3,   coords: [33.0417, -116.8653] },
+  'Oceanside':          { count: 3,   coords: [33.1959, -117.3795] },
+  'Del Mar':            { count: 2,   coords: [32.9595, -117.2653] },
+  'Fallbrook':          { count: 2,   coords: [33.3764, -117.2511] },
+  'Escondido':          { count: 2,   coords: [33.1192, -117.0864] },
+  'National City':      { count: 2,   coords: [32.6781, -117.0992] },
+  'San Marcos':         { count: 2,   coords: [33.1434, -117.1661] },
+  'Alpine':             { count: 1,   coords: [32.8351, -116.7664] },
+  'Valley Center':      { count: 1,   coords: [33.2178, -116.9756] },
+  'Solana Beach':       { count: 1,   coords: [32.9910, -117.2712] },
+  'Lemon Grove':        { count: 1,   coords: [32.7325, -117.0314] },
+  'Julian':             { count: 1,   coords: [33.0787, -116.6019] },
+  'Cardiff by the Sea': { count: 1,   coords: [33.0148, -117.2795] }
+};
+const sdCountyTotalMembers = 232;
+const sdCountyCities = Object.keys(membersByCity).length;
+
+// ZIP → {count, coords, neighborhood}
+const membersByZip = {
+  '92117': { count: 13, coords: [32.8156, -117.1892], nbhd: 'Clairemont Mesa West' },
+  '92120': { count: 8,  coords: [32.7978, -117.0644], nbhd: 'Allied Gardens / Grantville' },
+  '92101': { count: 7,  coords: [32.7174, -117.1628], nbhd: 'Downtown / Little Italy' },
+  '92111': { count: 7,  coords: [32.7891, -117.1694], nbhd: 'Linda Vista / Clairemont' },
+  '92127': { count: 7,  coords: [33.0011, -117.0856], nbhd: 'Rancho Bernardo / Sabre Springs' },
+  '92131': { count: 6,  coords: [32.8994, -117.0628], nbhd: 'Scripps Ranch' },
+  '92119': { count: 6,  coords: [32.8000, -117.0411], nbhd: 'San Carlos / Navajo' },
+  '92129': { count: 6,  coords: [32.9611, -117.1192], nbhd: 'Rancho Peñasquitos' },
+  '92128': { count: 5,  coords: [33.0250, -117.0597], nbhd: 'Rancho Bernardo' },
+  '92124': { count: 5,  coords: [32.8275, -117.0825], nbhd: 'Tierrasanta' },
+  '92122': { count: 5,  coords: [32.8603, -117.2136], nbhd: 'University City' },
+  '92116': { count: 4,  coords: [32.7647, -117.1233], nbhd: 'Normal Heights / Kensington' },
+  '92123': { count: 4,  coords: [32.8025, -117.1358], nbhd: 'Serra Mesa / Mission Valley E.' },
+  '92107': { count: 4,  coords: [32.7404, -117.2328], nbhd: 'Ocean Beach / Point Loma' },
+  '92105': { count: 4,  coords: [32.7358, -117.0986], nbhd: 'City Heights / Eastern' },
+  '92130': { count: 3,  coords: [32.9269, -117.2044], nbhd: 'Carmel Valley' },
+  '92126': { count: 3,  coords: [32.9139, -117.1358], nbhd: 'Mira Mesa' },
+  '92109': { count: 3,  coords: [32.7924, -117.2321], nbhd: 'Pacific Beach / Mission Bay' },
+  '92104': { count: 3,  coords: [32.7377, -117.1286], nbhd: 'North Park / South Park' },
+  '92106': { count: 3,  coords: [32.7197, -117.2214], nbhd: 'Point Loma / Shelter Island' },
+  '92103': { count: 2,  coords: [32.7461, -117.1642], nbhd: 'Mission Hills / Hillcrest' },
+  '92160': { count: 2,  coords: [32.7757, -117.0711], nbhd: 'SDSU area' },
+  '92115': { count: 2,  coords: [32.7672, -117.0703], nbhd: 'College Grove / SDSU' },
+  '92110': { count: 1,  coords: [32.7649, -117.1992], nbhd: 'Old Town / Linda Vista' },
+  '92177': { count: 1,  coords: [32.9200, -117.1300], nbhd: 'Mira Mesa (PO Box)' },
+  '92139': { count: 1,  coords: [32.6836, -117.0314], nbhd: 'Paradise Hills / Encanto' },
+  '92108': { count: 1,  coords: [32.7697, -117.1483], nbhd: 'Mission Valley' },
+  '92138': { count: 1,  coords: [32.7461, -117.1550], nbhd: 'Mission Hills (PO Box)' },
+  '92102': { count: 1,  coords: [32.7063, -117.1286], nbhd: 'Logan Heights / South Park' }
+};
+const sdCityTotalMembers = 118;
+const sdCityZips = Object.keys(membersByZip).length;
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+
 let map;
 let currentMapType = 'us';
 let stateLayer;
 
-// Data
-const membersByState = {
-'California': 257, 'Washington': 15, 'Oregon': 12, 'Texas': 9, 'Arizona': 7,
-'Florida': 6, 'Colorado': 5, 'North Carolina': 5, 'New Jersey': 4, 'New York': 4,
-'Ohio': 3, 'Maryland': 3, 'Massachusetts': 3, 'Illinois': 3, 'Pennsylvania': 2,
-'Virginia': 2, 'Utah': 2, 'Tennessee': 2, 'Nebraska': 2, 'Maine': 2, 'Arkansas': 2,
-'South Carolina': 1, 'Nevada': 1, 'Montana': 1, 'Minnesota': 1, 'Kentucky': 1,
-'Indiana': 1, 'Idaho': 1, 'Hawaii': 1, 'Georgia': 1, 'Delaware': 1, 'Alaska': 1
-};
-
-const membersByCounty = {
-'San Diego': { count: 201, coords: [32.7157, -117.1611] },
-'Orange': { count: 4, coords: [33.7175, -117.8311] },
-'Los Angeles': { count: 4, coords: [34.0522, -118.2437] },
-'Santa Clara': { count: 4, coords: [37.3541, -121.9552] },
-'Riverside': { count: 5, coords: [33.7208, -116.2154] },
-'Sacramento': { count: 5, coords: [38.7816, -121.4944] },
-'Santa Barbara': { count: 3, coords: [34.4208, -119.6982] },
-'Sonoma': { count: 2, coords: [38.5816, -122.8678] },
-'San Luis Obispo': { count: 1, coords: [35.3050, -120.6625] },
-'Ventura': { count: 2, coords: [34.3705, -119.2290] },
-'Alameda': { count: 1, coords: [37.6017, -121.7195] },
-'Contra Costa': { count: 2, coords: [37.9161, -121.9744] },
-'Marin': { count: 1, coords: [38.0834, -122.7633] },
-'Monterey': { count: 1, coords: [36.6002, -121.8947] },
-'Napa': { count: 1, coords: [38.5025, -122.2654] },
-'Nevada': { count: 1, coords: [39.2658, -121.0146] },
-'Placer': { count: 2, coords: [39.0916, -120.8039] },
-'San Joaquin': { count: 1, coords: [37.9577, -121.2908] },
-'San Mateo': { count: 1, coords: [37.5630, -122.3255] },
-'Shasta': { count: 1, coords: [40.7608, -122.2736] },
-'Tulare': { count: 1, coords: [36.2077, -119.3473] },
-'Fresno': { count: 1, coords: [36.8859, -119.2321] },
-'Imperial': { count: 2, coords: [32.8312, -115.5631] },
-'Inyo': { count: 1, coords: [36.8053, -118.0623] }
-};
-
-const membersByCity = {
-'San Diego': { count: 118, coords: [32.7157, -117.1611] },
-'El Cajon': { count: 17, coords: [32.7948, -116.9625] },
-'Encinitas': { count: 9, coords: [33.0370, -117.2920] },
-'Lakeside': { count: 9, coords: [32.8494, -116.9056] },
-'Carlsbad': { count: 8, coords: [33.1581, -117.3506] },
-'La Jolla': { count: 8, coords: [32.8328, -117.2713] },
-'Spring Valley': { count: 8, coords: [32.7448, -116.9989] },
-'Coronado': { count: 7, coords: [32.6859, -117.1831] },
-'Poway': { count: 6, coords: [32.9628, -117.0359] },
-'La Mesa': { count: 6, coords: [32.7678, -117.0231] },
-'Bonita': { count: 5, coords: [32.6581, -117.0253] },
-'Lemon Grove': { count: 5, coords: [32.7426, -117.0314] },
-'Jamul': { count: 5, coords: [32.7284, -116.8753] },
-'Chula Vista': { count: 4, coords: [32.6401, -117.0842] },
-'Santee': { count: 4, coords: [32.8384, -116.9739] },
-'Oceanside': { count: 3, coords: [33.1959, -117.3795] },
-'Ramona': { count: 3, coords: [33.0420, -116.8681] },
-'Escondido': { count: 3, coords: [33.1192, -117.0864] },
-'Del Mar': { count: 2, coords: [32.9595, -117.2653] },
-'Fallbrook': { count: 2, coords: [33.3767, -117.2511] },
-'National City': { count: 2, coords: [32.6781, -117.0992] },
-'Julian': { count: 1, coords: [33.0789, -116.6025] },
-'Cardiff By The Sea': { count: 1, coords: [33.0142, -117.2806] },
-'Solana Beach': { count: 1, coords: [32.9911, -117.2714] },
-'Vista': { count: 1, coords: [33.2000, -117.2425] },
-'Valley Center': { count: 1, coords: [33.2297, -117.0281] }
-};
-
-// Initialize map
 function initializeMap() {
-if (map) {
-map.remove();
-}
-map = L.map('map').setView([39.8283, -98.5795], 4);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-attribution: '© OpenStreetMap contributors',
-maxZoom: 15,
-minZoom: 3
-}).addTo(map);
+  if (map) { map.remove(); }
+  map = L.map('map').setView([39.8283, -98.5795], 4);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd', maxZoom: 19, minZoom: 3
+  }).addTo(map);
 }
 
-// Color functions
-function getUSColor(memberCount) {
-if (memberCount >= 100) return '#c0392b';
-if (memberCount >= 10) return '#e74c3c';
-if (memberCount >= 5) return '#f39c12';
-if (memberCount >= 2) return '#f1c40f';
-if (memberCount >= 1) return '#2ecc71';
-return '#ecf0f1';
+// ── COLOR FUNCTIONS ───────────────────────────────────────────────────────────
+
+function getUSColor(n) {
+  if (n >= 100) return '#c0392b';
+  if (n >= 10)  return '#e74c3c';
+  if (n >= 5)   return '#f39c12';
+  if (n >= 2)   return '#f1c40f';
+  if (n >= 1)   return '#2ecc71';
+  return '#ecf0f1';
 }
 
-function getCAColor(memberCount) {
-if (memberCount >= 150) return '#8b0000';
-if (memberCount >= 10) return '#dc143c';
-if (memberCount >= 5) return '#ff6347';
-if (memberCount >= 2) return '#ffa500';
-if (memberCount >= 1) return '#32cd32';
-return '#ecf0f1';
+function getCAColor(n) {
+  if (n >= 150) return '#8b0000';
+  if (n >= 10)  return '#dc143c';
+  if (n >= 5)   return '#ff6347';
+  if (n >= 2)   return '#ffa500';
+  if (n >= 1)   return '#32cd32';
+  return '#ecf0f1';
 }
 
-function getSDColor(memberCount) {
-if (memberCount >= 50) return '#8b0000';
-if (memberCount >= 10) return '#dc143c';
-if (memberCount >= 5) return '#ff6347';
-if (memberCount >= 2) return '#ffa500';
-if (memberCount >= 1) return '#32cd32';
-return '#ecf0f1';
+function getSDColor(n) {
+  if (n >= 50) return '#8b0000';
+  if (n >= 10) return '#dc143c';
+  if (n >= 5)  return '#ff6347';
+  if (n >= 2)  return '#ffa500';
+  if (n >= 1)  return '#32cd32';
+  return '#ecf0f1';
 }
 
-// US Map Functions
+function getZIPColor(n) {
+  if (n >= 10) return '#8b0000';
+  if (n >= 7)  return '#dc143c';
+  if (n >= 4)  return '#ff6347';
+  if (n >= 2)  return '#ffa500';
+  if (n >= 1)  return '#32cd32';
+  return '#ecf0f1';
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+
+function updateActiveButton(idx) {
+  document.querySelectorAll('.nav-button').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+}
+
+function createStatusMessage(msg) {
+  const d = document.createElement('div');
+  d.className = 'status-message';
+  d.innerHTML = msg;
+  document.querySelector('.container').insertBefore(d, document.getElementById('legendContainer'));
+  return d;
+}
+
+function clearCircleMarkers() {
+  map.eachLayer(l => { if (l instanceof L.CircleMarker) map.removeLayer(l); });
+}
+
+// ── US MAP ────────────────────────────────────────────────────────────────────
+
 function showUSMap() {
-currentMapType = 'us';
-updateActiveButton(0);
-document.getElementById('mapTitle').textContent = 'Member Distribution by State';
-document.getElementById('mapSubtitle').textContent = 'Hover over states to see member counts - Click for detailed information';
-document.getElementById('countyListContainer').style.display = 'none';
-document.getElementById('cityListContainer').style.display = 'none';
-
-initializeMap();
-loadUSStates();
-updateUSLegend();
-updateUSStats();
+  currentMapType = 'us';
+  updateActiveButton(0);
+  document.getElementById('mapTitle').textContent = 'Member Distribution by State';
+  document.getElementById('mapSubtitle').textContent =
+    `${usTotalMembers} US members across ${usTotalStates} states + DC — hover to inspect, click California to drill down`;
+  initializeMap();
+  loadUSStates();
+  updateUSLegend();
+  updateUSStats();
 }
 
 function loadUSStates() {
-const statusDiv = createStatusMessage('Loading US state boundaries...');
-fetch('https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json')
-.then(response => response.json())
-.then(data => {
-statusDiv.innerHTML = 'Processing state boundaries...';
+  const statusDiv = createStatusMessage('Loading US state boundaries…');
+  fetch('https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json')
+    .then(r => r.json())
+    .then(data => {
+      statusDiv.innerHTML = 'Processing state boundaries…';
 
-function onEachFeature(feature, layer) {
-const stateName = feature.properties.name;
-const memberCount = membersByState[stateName] || 0;
+      function onEachFeature(feature, layer) {
+        const name = feature.properties.name;
+        const count = membersByState[name] || 0;
+        const pct = count > 0 ? ((count / usTotalMembers) * 100).toFixed(1) : '0.0';
 
-layer.bindTooltip(`${stateName}<br><strong>${memberCount} members</strong>`, {
-permanent: false,
-direction: 'top',
-offset: [0, -10],
-className: 'custom-tooltip'
-});
-        
-layer.on({
-mouseover: function(e) {
-e.target.setStyle({ weight: 3, fillOpacity: 0.9 });
-},
-mouseout: function(e) {
-stateLayer.resetStyle(e.target);
-},
-click: function(e) {
-const percentage = memberCount > 0 ? ((memberCount / 413) * 100).toFixed(1) : '0.0';
-let popupContent = `
-<div style="font-size: 14px; line-height: 1.4;">
-<div style="font-weight: bold; color: #2c3e50; margin-bottom: 5px;">${stateName}</div>
-<div style="color: #3498db; font-weight: 500; font-size: 16px;">${memberCount} members</div>
-<div style="color: #7f8c8d; margin-top: 5px;">${percentage}% of total membership</div>`;
-            
-if (stateName === 'California') {
-popupContent += `<button onclick="showCaliforniaMap()" class="popup-button">View County Details →</button>`;
-}
-popupContent += `</div>`;
-layer.bindPopup(popupContent).openPopup();
-}
-});
-}
+        layer.bindTooltip(`${name}<br><strong>${count} member${count !== 1 ? 's' : ''}</strong>`, {
+          permanent: false, direction: 'top', offset: [0, -10], className: 'custom-tooltip'
+        });
 
-stateLayer = L.geoJSON(data, {
-style: function(feature) {
-const stateName = feature.properties.name;
-const memberCount = membersByState[stateName] || 0;
-return {
-fillColor: getUSColor(memberCount),
-weight: 2,
-opacity: 1,
-color: '#2c3e50',
-dashArray: '',
-fillOpacity: 0.7
-};
-},
-onEachFeature: onEachFeature
-}).addTo(map);
+        layer.on({
+          mouseover: e => e.target.setStyle({ weight: 3, fillOpacity: 0.9 }),
+          mouseout:  e => stateLayer.resetStyle(e.target),
+          click: e => {
+            let html = `
+              <div style="font-size:14px;line-height:1.5;">
+                <div style="font-weight:bold;color:#2c3e50;margin-bottom:5px;">${name}</div>
+                <div style="color:#3498db;font-weight:500;font-size:16px;">${count} member${count !== 1 ? 's' : ''}</div>
+                <div style="color:#7f8c8d;margin-top:5px;">${pct}% of US total</div>`;
+            if (name === 'California') {
+              html += `<button onclick="showCaliforniaMap()" class="popup-button">View County Details →</button>`;
+            }
+            html += `</div>`;
+            layer.bindPopup(html).openPopup();
+          }
+        });
+      }
 
-map.fitBounds(stateLayer.getBounds());
-statusDiv.innerHTML = 'US membership map loaded successfully!';
-setTimeout(() => statusDiv.remove(), 2000);
-})
-.catch(error => {
-console.log('State boundary loading failed:', error);
-statusDiv.innerHTML = 'Could not load state boundaries. Please refresh the page.';
-});
+      stateLayer = L.geoJSON(data, {
+        style: feature => ({
+          fillColor: getUSColor(membersByState[feature.properties.name] || 0),
+          weight: 2, opacity: 1, color: '#2c3e50', fillOpacity: 0.7
+        }),
+        onEachFeature
+      }).addTo(map);
+
+      map.fitBounds(stateLayer.getBounds());
+      statusDiv.innerHTML = 'US membership map loaded.';
+      setTimeout(() => statusDiv.remove(), 2000);
+    })
+    .catch(() => {
+      statusDiv.innerHTML = 'Could not load state boundaries. Please refresh.';
+    });
 }
 
 function updateUSLegend() {
-document.getElementById('legendContainer').innerHTML = `
-<h3>Members per State</h3>
-<div class="legend-item">
-<div class="legend-color high-members"></div>
-<span>100+ members (California: 257)</span>
-</div>
-<div class="legend-item">
-<div class="legend-color medium-high-members"></div>
-<span>10-99 members (Washington, Oregon, Texas)</span>
-</div>
-<div class="legend-item">
-<div class="legend-color medium-members"></div>
-<span>5-9 members (Arizona, Colorado, etc.)</span>
-</div>
-<div class="legend-item">
-<div class="legend-color low-members"></div>
-<span>2-4 members</span>
-</div>
-<div class="legend-item">
-<div class="legend-color very-low-members"></div>
-<span>1 member</span>
-</div>
-<div class="legend-item">
-<div class="legend-color no-members"></div>
-<span>No members</span>
-</div>
-`;
+  document.getElementById('legendContainer').innerHTML = `
+    <h3>Members per State</h3>
+    <div class="legend-item"><div class="legend-color high-members"></div><span>100+ members (California: ${membersByState['California']})</span></div>
+    <div class="legend-item"><div class="legend-color medium-high-members"></div><span>10–99 members (Washington: 18, Oregon: 11…)</span></div>
+    <div class="legend-item"><div class="legend-color medium-members"></div><span>5–9 members</span></div>
+    <div class="legend-item"><div class="legend-color low-members"></div><span>2–4 members</span></div>
+    <div class="legend-item"><div class="legend-color very-low-members"></div><span>1 member</span></div>
+    <div class="legend-item"><div class="legend-color no-members"></div><span>No members</span></div>`;
 }
 
 function updateUSStats() {
-document.getElementById('statsContainer').innerHTML = `
-<h3>Total US Members</h3>
-<p class="member-count">413</p>
-<p>Across 32 states</p>
-`;
+  document.getElementById('statsContainer').innerHTML = `
+    <h3>Total US Members</h3>
+    <p class="member-count">${usTotalMembers}</p>
+    <p>Across ${usTotalStates} states + DC &nbsp;|&nbsp; 3 international &nbsp;|&nbsp; 3 blank &nbsp;|&nbsp; 399 total records</p>`;
 }
 
-// California Map Functions
-function showCaliforniaMap() {
-currentMapType = 'california';
-updateActiveButton(1);
-document.getElementById('mapTitle').textContent = 'California Members by County';
-document.getElementById('mapSubtitle').textContent = '257 members across California counties';
-document.getElementById('countyListContainer').style.display = 'block';
-document.getElementById('cityListContainer').style.display = 'none';
+// ── CALIFORNIA MAP ────────────────────────────────────────────────────────────
 
-initializeMap();
-map.setView([36.7783, -119.4179], 6);
-loadCaliforniaCounties();
-updateCaliforniaLegend();
-updateCaliforniaStats();
-populateCountyList();
+function showCaliforniaMap() {
+  currentMapType = 'california';
+  updateActiveButton(1);
+  document.getElementById('mapTitle').textContent = 'California Members by County';
+  document.getElementById('mapSubtitle').textContent =
+    `${caTotalMembers} members across California counties — click San Diego County to drill down`;
+  initializeMap();
+  map.setView([36.78, -119.42], 6);
+  loadCaliforniaCounties();
+  updateCALegend();
+  updateCAStats();
 }
 
 function loadCaliforniaCounties() {
-// Clear any existing layers
-map.eachLayer(function(layer) {
-if (layer instanceof L.CircleMarker) {
-map.removeLayer(layer);
-}
-});
+  clearCircleMarkers();
+  Object.entries(membersByCounty).forEach(([name, data]) => {
+    const r = Math.min(Math.max(data.count * 0.3, 8), 35);
+    const marker = L.circleMarker(data.coords, {
+      radius: r,
+      fillColor: getCAColor(data.count),
+      color: '#2c3e50', weight: 2, opacity: 1, fillOpacity: 0.8
+    }).addTo(map);
 
-Object.entries(membersByCounty).forEach(([countyName, data]) => {
-const marker = L.circleMarker(data.coords, {
-radius: Math.min(Math.max(data.count * 0.3, 8), 30),
-fillColor: getCAColor(data.count),
-color: '#2c3e50',
-weight: 2,
-opacity: 1,
-fillOpacity: 0.8
-}).addTo(map);
+    marker.bindTooltip(
+      `${name} County<br><strong>${data.count} member${data.count !== 1 ? 's' : ''}</strong>`,
+      { permanent: false, direction: 'top', offset: [0, -10], className: 'custom-tooltip' }
+    );
 
-marker.bindTooltip(`${countyName} County<br><strong>${data.count} members</strong>`, {
-permanent: false,
-direction: 'top',
-offset: [0, -10],
-className: 'custom-tooltip'
-});
-
-marker.on('click', function() {
-const percentage = ((data.count / 257) * 100).toFixed(1);
-let popupContent = `
-<div style="font-size: 14px; line-height: 1.4;">
-<div style="font-weight: bold; color: #2c3e50; margin-bottom: 5px;">${countyName} County</div>
-<div style="color: #3498db; font-weight: 500; font-size: 16px;">${data.count} members</div>
-<div style="color: #7f8c8d; margin-top: 5px;">${percentage}% of California total</div>`;
-        
-if (countyName === 'San Diego') {
-popupContent += `<button onclick="showSanDiegoMap()" class="popup-button">View City Details →</button>`;
-}
-popupContent += `</div>`;
-marker.bindPopup(popupContent).openPopup();
-});
-});
+    marker.on('click', () => {
+      const pct = ((data.count / caTotalMembers) * 100).toFixed(1);
+      let html = `
+        <div style="font-size:14px;line-height:1.5;min-width:180px;">
+          <div style="font-weight:bold;color:#2c3e50;margin-bottom:5px;">${name} County</div>
+          <div style="color:#3498db;font-weight:500;font-size:16px;">${data.count} member${data.count !== 1 ? 's' : ''}</div>
+          <div style="color:#7f8c8d;margin-top:5px;">${pct}% of California total</div>`;
+      if (name === 'San Diego') {
+        html += `<button onclick="showSanDiegoMap()" class="popup-button">View City Details →</button>`;
+      }
+      html += `</div>`;
+      marker.bindPopup(html).openPopup();
+    });
+  });
 }
 
-function populateCountyList() {
-const countyGrid = document.createElement('div');
-countyGrid.className = 'county-grid';
-countyGrid.id = 'countyGrid';
-
-Object.entries(membersByCounty)
-.sort((a, b) => b[1].count - a[1].count)
-.forEach(([countyName, data]) => {
-const countyItem = document.createElement('div');
-countyItem.className = 'county-item';
-countyItem.innerHTML = `
-<div class="county-name">${countyName} County</div>
-<div class="county-members">${data.count} members</div>
-`;
-countyItem.onclick = () => {
-map.setView(data.coords, countyName === 'San Diego' ? 9 : 8);
-};
-countyGrid.appendChild(countyItem);
-});
-
-document.getElementById('countyListContainer').innerHTML = `
-<h3>Counties with Members (Click to zoom)</h3>
-`;
-document.getElementById('countyListContainer').appendChild(countyGrid);
+function updateCALegend() {
+  document.getElementById('legendContainer').innerHTML = `
+    <h3>Members per County</h3>
+    <div class="legend-item"><div class="legend-color very-high-members"></div><span>150+ members (San Diego: 232)</span></div>
+    <div class="legend-item"><div class="legend-color ca-high-members"></div><span>10–49 members</span></div>
+    <div class="legend-item"><div class="legend-color ca-medium-members"></div><span>5–9 members</span></div>
+    <div class="legend-item"><div class="legend-color ca-low-members"></div><span>2–4 members</span></div>
+    <div class="legend-item"><div class="legend-color ca-very-low-members"></div><span>1 member</span></div>
+    <div class="legend-item"><div class="legend-color no-members"></div><span>No members</span></div>`;
 }
 
-function updateCaliforniaLegend() {
-document.getElementById('legendContainer').innerHTML = `
-<h3>Members per County</h3>
-<div class="legend-item">
-<div class="legend-color very-high-members"></div>
-<span>150+ members (San Diego County: 201)</span>
-</div>
-<div class="legend-item">
-<div class="legend-color ca-high-members"></div>
-<span>10-49 members</span>
-</div>
-<div class="legend-item">
-<div class="legend-color ca-medium-members"></div>
-<span>5-9 members</span>
-</div>
-<div class="legend-item">
-<div class="legend-color ca-low-members"></div>
-<span>2-4 members</span>
-</div>
-<div class="legend-item">
-<div class="legend-color ca-very-low-members"></div>
-<span>1 member</span>
-</div>
-<div class="legend-item">
-<div class="legend-color no-members"></div>
-<span>No members</span>
-</div>
-`;
+function updateCAStats() {
+  const sdPct = ((membersByCounty['San Diego'].count / caTotalMembers) * 100).toFixed(1);
+  document.getElementById('statsContainer').innerHTML = `
+    <h3>Total California Members</h3>
+    <p class="member-count">${caTotalMembers}</p>
+    <p>San Diego County: ${sdPct}% of state total</p>`;
 }
 
-function updateCaliforniaStats() {
-document.getElementById('statsContainer').innerHTML = `
-<h3>Total California Members</h3>
-<p class="member-count">257</p>
-<p>San Diego County: 78.2% of state total</p>
-`;
-}
+// ── SAN DIEGO COUNTY MAP ──────────────────────────────────────────────────────
 
-// San Diego Map Functions
 function showSanDiegoMap() {
-currentMapType = 'sandiego';
-updateActiveButton(2);
-document.getElementById('mapTitle').textContent = 'San Diego County Members by City';
-document.getElementById('mapSubtitle').textContent = '201 members across 26 San Diego County cities';
-document.getElementById('countyListContainer').style.display = 'none';
-document.getElementById('cityListContainer').style.display = 'block';
-
-initializeMap();
-map.setView([32.7157, -117.1611], 10);
-loadSanDiegoCities();
-updateSanDiegoLegend();
-updateSanDiegoStats();
-populateCityList();
+  currentMapType = 'sandiego';
+  updateActiveButton(2);
+  document.getElementById('mapTitle').textContent = 'San Diego County Members by City';
+  document.getElementById('mapSubtitle').textContent =
+    `${sdCountyTotalMembers} members across ${sdCountyCities} cities — click San Diego city to see ZIP code detail`;
+  initializeMap();
+  map.setView([32.82, -117.00], 10);
+  loadSanDiegoCities();
+  updateSDLegend();
+  updateSDStats();
 }
 
 function loadSanDiegoCities() {
-// Clear any existing layers
-map.eachLayer(function(layer) {
-if (layer instanceof L.CircleMarker) {
-map.removeLayer(layer);
-}
-});
+  clearCircleMarkers();
+  const sortedCities = Object.entries(membersByCity).sort(([,a],[,b]) => b.count - a.count);
+  const cityCount = sortedCities.length;
 
-Object.entries(membersByCity).forEach(([cityName, data]) => {
-const markerSize = Math.min(Math.max(8 + (data.count * 0.8), 8), 35);
-const marker = L.circleMarker(data.coords, {
-radius: markerSize,
-fillColor: getSDColor(data.count),
-color: '#2c3e50',
-weight: 3,
-opacity: 1,
-fillOpacity: 0.8
-}).addTo(map);
+  Object.entries(membersByCity).forEach(([name, data]) => {
+    const r = Math.min(Math.max(8 + data.count * 0.8, 8), 38);
+    const marker = L.circleMarker(data.coords, {
+      radius: r,
+      fillColor: getSDColor(data.count),
+      color: '#2c3e50', weight: 2, opacity: 1, fillOpacity: 0.8
+    }).addTo(map);
 
-marker.bindTooltip(`
-<div style="text-align: center; font-weight: 600;">
-<div style="font-size: 16px; margin-bottom: 4px;">${cityName}</div>
-<div style="font-size: 14px; color: #3498db;">${data.count} member${data.count !== 1 ? 's' : ''}</div>
-</div>`, {
-permanent: false,
-direction: 'top',
-offset: [0, -10],
-className: 'custom-tooltip'
-});
+    marker.bindTooltip(`
+      <div style="text-align:center;font-weight:600;">
+        <div style="font-size:16px;margin-bottom:4px;">${name}</div>
+        <div style="font-size:14px;color:#3498db;">${data.count} member${data.count !== 1 ? 's' : ''}</div>
+      </div>`, {
+      permanent: false, direction: 'top', offset: [0, -10], className: 'custom-tooltip'
+    });
 
-marker.on('click', function() {
-const percentage = ((data.count / 201) * 100).toFixed(1);
-const rank = Object.entries(membersByCity)
-.sort(([,a], [,b]) => b.count - a.count)
-.findIndex(([name]) => name === cityName) + 1;
-            
-marker.bindPopup(`
-<div style="text-align: center; padding: 5px; min-width: 200px;">
-<div style="font-size: 18px; font-weight: bold; color: #2c3e50; margin-bottom: 8px;">
-${cityName}
-</div>
-<div style="font-size: 24px; font-weight: 700; color: #3498db; margin-bottom: 8px;">
-${data.count} member${data.count !== 1 ? 's' : ''}
-</div>
-<div style="color: #7f8c8d; margin-bottom: 5px;">
-<strong>${percentage}%</strong> of county total
-</div>
-<div style="color: #27ae60; font-weight: 600;">
-Rank: #${rank} of 26 cities
-</div>
-</div>
-`, {
-maxWidth: 250
-}).openPopup();
-});
-});
+    marker.on('click', () => {
+      const pct = ((data.count / sdCountyTotalMembers) * 100).toFixed(1);
+      const rank = sortedCities.findIndex(([n]) => n === name) + 1;
+      let html = `
+        <div style="text-align:center;padding:5px;min-width:200px;">
+          <div style="font-size:18px;font-weight:bold;color:#2c3e50;margin-bottom:8px;">${name}</div>
+          <div style="font-size:24px;font-weight:700;color:#3498db;margin-bottom:8px;">${data.count} member${data.count !== 1 ? 's' : ''}</div>
+          <div style="color:#7f8c8d;margin-bottom:5px;"><strong>${pct}%</strong> of county total</div>
+          <div style="color:#27ae60;font-weight:600;">Rank: #${rank} of ${cityCount} cities</div>`;
+      if (name === 'San Diego') {
+        html += `<button onclick="showZipMap()" class="popup-button">View ZIP Code Details →</button>`;
+      }
+      html += `</div>`;
+      marker.bindPopup(html, { maxWidth: 260 }).openPopup();
+    });
+  });
 }
 
-function populateCityList() {
-const cityGrid = document.createElement('div');
-cityGrid.className = 'city-grid';
-
-const sortedCities = Object.entries(membersByCity)
-.sort(([,a], [,b]) => b.count - a.count);
-
-sortedCities.forEach(([cityName, data], index) => {
-const cityItem = document.createElement('div');
-cityItem.className = 'city-item';
-const percentage = ((data.count / 201) * 100).toFixed(1);
-cityItem.innerHTML = `
-<div class="city-name">${index + 1}. ${cityName}</div>
-<div class="city-members">${data.count} members (${percentage}%)</div>
-`;
-cityItem.onclick = () => {
-map.setView(data.coords, 12);
-};
-cityGrid.appendChild(cityItem);
-});
-
-document.getElementById('cityListContainer').innerHTML = `
-<h3>All Cities with Members (Ranked by Member Count)</h3>
-`;
-document.getElementById('cityListContainer').appendChild(cityGrid);
+function updateSDLegend() {
+  document.getElementById('legendContainer').innerHTML = `
+    <h3>Members per City</h3>
+    <div class="legend-item"><div class="legend-color very-high-members"></div><span><strong>50+ members</strong> (San Diego: 118)</span></div>
+    <div class="legend-item"><div class="legend-color ca-high-members"></div><span><strong>10–49 members</strong> (El Cajon: 15, Lakeside: 10)</span></div>
+    <div class="legend-item"><div class="legend-color ca-medium-members"></div><span><strong>5–9 members</strong> (7 cities)</span></div>
+    <div class="legend-item"><div class="legend-color ca-low-members"></div><span><strong>2–4 members</strong> (9 cities)</span></div>
+    <div class="legend-item"><div class="legend-color ca-very-low-members"></div><span><strong>1 member</strong> (7 cities)</span></div>`;
 }
 
-function updateSanDiegoLegend() {
-document.getElementById('legendContainer').innerHTML = `
-<h3>Members per City</h3>
-<div class="legend-item">
-<div class="legend-color very-high-members"></div>
-<span><strong>50+ members</strong> (San Diego: 118)</span>
-</div>
-<div class="legend-item">
-<div class="legend-color ca-high-members"></div>
-<span><strong>10-49 members</strong> (El Cajon: 17)</span>
-</div>
-<div class="legend-item">
-<div class="legend-color ca-medium-members"></div>
-<span><strong>5-9 members</strong> (6 cities)</span>
-</div>
-<div class="legend-item">
-<div class="legend-color ca-low-members"></div>
-<span><strong>2-4 members</strong> (8 cities)</span>
-</div>
-<div class="legend-item">
-<div class="legend-color ca-very-low-members"></div>
-<span><strong>1 member</strong> (8 cities)</span>
-</div>
-`;
+function updateSDStats() {
+  const sdPct = ((membersByCity['San Diego'].count / sdCountyTotalMembers) * 100).toFixed(1);
+  document.getElementById('statsContainer').innerHTML = `
+    <h3>Total San Diego County Members</h3>
+    <p class="member-count">${sdCountyTotalMembers}</p>
+    <p><strong>San Diego city:</strong> ${sdPct}% of county total</p>`;
 }
 
-function updateSanDiegoStats() {
-document.getElementById('statsContainer').innerHTML = `
-<h3>Total San Diego County Members</h3>
-<div class="member-count">201</div>
-<p><strong>San Diego city:</strong> 58.7% of county total</p>
-<p><strong>Top 5 cities:</strong> 76.6% of county total</p>
-`;
+// ── SAN DIEGO CITY ZIP MAP ────────────────────────────────────────────────────
+
+function showZipMap() {
+  currentMapType = 'zip';
+  updateActiveButton(3);
+  document.getElementById('mapTitle').textContent = 'San Diego City Members by ZIP Code';
+  document.getElementById('mapSubtitle').textContent =
+    `${sdCityTotalMembers} members across ${sdCityZips} ZIP codes — hover to inspect`;
+  initializeMap();
+  map.setView([32.820, -117.140], 11);
+  loadZipMarkers();
+  updateZIPLegend();
+  updateZIPStats();
 }
 
-// Utility functions
-function updateActiveButton(activeIndex) {
-const buttons = document.querySelectorAll('.nav-button');
-buttons.forEach((button, index) => {
-if (index === activeIndex) {
-button.classList.add('active');
-} else {
-button.classList.remove('active');
-}
-});
+function loadZipMarkers() {
+  clearCircleMarkers();
+  const sortedZips = Object.entries(membersByZip).sort(([,a],[,b]) => b.count - a.count);
+  const zipCount = sortedZips.length;
+
+  Object.entries(membersByZip).forEach(([zip, data]) => {
+    const r = Math.min(Math.max(10 + data.count * 1.2, 10), 38);
+    const marker = L.circleMarker(data.coords, {
+      radius: r,
+      fillColor: getZIPColor(data.count),
+      color: '#2c3e50', weight: 2, opacity: 1, fillOpacity: 0.8
+    }).addTo(map);
+
+    marker.bindTooltip(`
+      <div style="text-align:center;font-weight:600;">
+        <div style="font-size:16px;margin-bottom:2px;">${zip}</div>
+        <div style="font-size:12px;opacity:0.85;margin-bottom:4px;">${data.nbhd}</div>
+        <div style="font-size:14px;color:#3498db;">${data.count} member${data.count !== 1 ? 's' : ''}</div>
+      </div>`, {
+      permanent: false, direction: 'top', offset: [0, -10], className: 'custom-tooltip'
+    });
+
+    marker.on('click', () => {
+      const pct = ((data.count / sdCityTotalMembers) * 100).toFixed(1);
+      const rank = sortedZips.findIndex(([z]) => z === zip) + 1;
+      marker.bindPopup(`
+        <div style="text-align:center;padding:5px;min-width:210px;">
+          <div style="font-size:20px;font-weight:bold;color:#2c3e50;margin-bottom:4px;">ZIP ${zip}</div>
+          <div style="font-size:13px;color:#7f8c8d;margin-bottom:8px;">${data.nbhd}</div>
+          <div style="font-size:24px;font-weight:700;color:#3498db;margin-bottom:8px;">${data.count} member${data.count !== 1 ? 's' : ''}</div>
+          <div style="color:#7f8c8d;margin-bottom:5px;"><strong>${pct}%</strong> of San Diego city total</div>
+          <div style="color:#27ae60;font-weight:600;">Rank: #${rank} of ${zipCount} ZIP codes</div>
+        </div>`, { maxWidth: 260 }).openPopup();
+    });
+  });
 }
 
-function createStatusMessage(message) {
-const statusDiv = document.createElement('div');
-statusDiv.className = 'status-message';
-statusDiv.innerHTML = message;
-document.querySelector('.container').insertBefore(statusDiv, document.querySelector('.legend'));
-return statusDiv;
+function updateZIPLegend() {
+  document.getElementById('legendContainer').innerHTML = `
+    <h3>Members per ZIP Code</h3>
+    <div class="legend-item"><div class="legend-color very-high-members"></div><span><strong>10+ members</strong> (92117: 13)</span></div>
+    <div class="legend-item"><div class="legend-color ca-high-members"></div><span><strong>7–9 members</strong> (92120: 8, etc.)</span></div>
+    <div class="legend-item"><div class="legend-color ca-medium-members"></div><span><strong>4–6 members</strong></span></div>
+    <div class="legend-item"><div class="legend-color ca-low-members"></div><span><strong>2–3 members</strong></span></div>
+    <div class="legend-item"><div class="legend-color ca-very-low-members"></div><span><strong>1 member</strong></span></div>`;
 }
 
-// Initialize the map on page load
-document.addEventListener('DOMContentLoaded', function() {
-showUSMap();
-});
-
-// Ensure map renders properly after any changes
-window.addEventListener('resize', () => {
-if (map) {
-setTimeout(() => map.invalidateSize(), 100);
+function updateZIPStats() {
+  const top5 = Object.values(membersByZip).map(d=>d.count).sort((a,b)=>b-a).slice(0,5);
+  const top5total = top5.reduce((s,v)=>s+v,0);
+  const top5pct = ((top5total / sdCityTotalMembers) * 100).toFixed(1);
+  document.getElementById('statsContainer').innerHTML = `
+    <h3>Total San Diego City Members</h3>
+    <p class="member-count">${sdCityTotalMembers}</p>
+    <p>Across ${sdCityZips} ZIP codes &nbsp;|&nbsp; Top 5 ZIPs: ${top5pct}% of city total</p>`;
 }
-});
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => showUSMap());
+window.addEventListener('resize', () => { if (map) setTimeout(() => map.invalidateSize(), 100); });
+
 </script>
 </body>
 </html>
